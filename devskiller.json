@@ -1,0 +1,7 @@
+{
+    "buildDescriptor" : "build.gradle.kts",
+    "verification" : {
+      "testNamePatterns" : [".*verify_pack.*"],
+      "pathPatterns" : ["**src/test/**/verify_pack**"]
+    }
+  }
