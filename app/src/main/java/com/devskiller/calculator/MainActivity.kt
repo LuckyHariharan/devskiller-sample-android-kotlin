@@ -27,9 +27,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        // find button
-        // hookup operation methods to calculator
+        // Check if the button is a digit
+        selectedDigit(view)?.let {
+            // Insert digit to the display
+            display.insertDigit(it)
+            refresh()
+            return
+        }
+
+        // Check if the button is an operation
+        selectedOperation(view)?.let {
+            // Evaluate the current value with the selected operation
+            calculator.evaluate(display.getValue())
+            // Set the selected operation
+            calculator.operation = it
+            // Clear the display if necessary
+            if (it == Operation.NONE) display.clear()
+            refresh()
+            return
+        }
+
+        // Handle special buttons like CE and backspace
+        when (view.id) {
+            R.id.ce -> {
+                display.clear()
+                calculator.clear()
+                refresh()
+            }
+            R.id.backspace -> {
+                display.removeDigit()
+                refresh()
+            }
+        }
     }
+
 
     private fun selectedDigit(view: View): Int? {
         return ButtonsMapping.DIGITS[view.id]
