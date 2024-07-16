@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        // Place here the solution
+        // find button
+        // hookup operation methods to calculator
     }
 
     private fun selectedDigit(view: View): Int? {
