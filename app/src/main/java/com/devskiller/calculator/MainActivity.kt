@@ -25,24 +25,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             findViewById<View>(id).setOnClickListener(this)
         }
     }
-
     override fun onClick(view: View) {
         // Check if the button is a digit
-        selectedDigit(view)?.let {
-            // Insert digit to the display
-            display.insertDigit(it)
+        val digit = selectedDigit(view)
+        if (digit != null) {
+            display.insertDigit(digit)
             refresh()
             return
         }
 
         // Check if the button is an operation
-        selectedOperation(view)?.let {
-            // Evaluate the current value with the selected operation
-            calculator.evaluate(display.getValue())
-            // Set the selected operation
-            calculator.operation = it
-            // Clear the display if necessary
-            if (it == Operation.NONE) display.clear()
+        val operation = selectedOperation(view)
+        if (operation != null) {
+            if (operation != Operation.NONE) {
+                // Evaluate the current value with the selected operation
+                val currentValue = display.getValue()
+                val result = calculator.evaluate(currentValue)
+                display.setValue(result)
+                calculator.operation = operation
+            } else {
+                // Equals operation: finalize the calculation
+                val result = calculator.evaluate(display.getValue())
+                display.setValue(result)
+                calculator.clear() // Reset calculator after operation
+            }
             refresh()
             return
         }
@@ -60,7 +66,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
-
 
     private fun selectedDigit(view: View): Int? {
         return ButtonsMapping.DIGITS[view.id]
